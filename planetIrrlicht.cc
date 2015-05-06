@@ -6,7 +6,7 @@ PlanetSceneNode::PlanetSceneNode(scene::ISceneNode* parent, scene::ISceneManager
     Material.Wireframe = false;
     //Material.Wireframe = true;
     Material.Lighting = false;
-    Material.BackfaceCulling = false;
+    //Material.BackfaceCulling = false;
 
     Populate();
 
@@ -27,6 +27,46 @@ PlanetSceneNode::PlanetSceneNode(scene::ISceneNode* parent, scene::ISceneManager
 }
 
 void PlanetSceneNode::Populate(){
+    vertice_count_ = 0;
+    face_count_ = 0;
+
+    auto it_face = FaceIterator(0);
+    Face face = it_face.begin();
+    while(face != it_face.end()){
+        //std::cout << vertice_count_ <<"\t" << face_count_ << std::endl;
+
+        std::shared_ptr<Point> p0 = std::get<0>(face);
+        std::shared_ptr<Point> p1 = std::get<1>(face);
+        std::shared_ptr<Point> p2 = std::get<2>(face);
+
+        CartesianCoord c0 = ToCartesian(PolarCoord(p0->radius_, p0->lattitude_, p0->longditude_));
+        CartesianCoord c1 = ToCartesian(PolarCoord(p1->radius_, p1->lattitude_, p1->longditude_));
+        CartesianCoord c2 = ToCartesian(PolarCoord(p2->radius_, p2->lattitude_, p2->longditude_));
+
+        /*DisplayCoord(c0);
+        DisplayCoord(c1);
+        DisplayCoord(c2);
+        std::cout << std::endl;*/
+
+        Vertices[vertice_count_ +0] = video::S3DVertex(C_Z(c0), C_Y(c0), C_X(c0), 1,1,0, video::SColor(255,0,0,255), 0, 1);
+        Vertices[vertice_count_ +1] = video::S3DVertex(C_Z(c1), C_Y(c1), C_X(c1), 1,1,0, video::SColor(255,vertice_count_ *10,0,255), 0, 1);
+        Vertices[vertice_count_ +2] = video::S3DVertex(C_Z(c2), C_Y(c2), C_X(c2), 1,1,0, video::SColor(255,0,vertice_count_ *10,255), 0, 1);
+
+        Indices[(face_count_ *3) +0] = vertice_count_ +0;
+        Indices[(face_count_ *3) +1] = vertice_count_ +1;
+        Indices[(face_count_ *3) +2] = vertice_count_ +2;
+        
+        vertice_count_ += 3;
+        face_count_ ++;
+        face = it_face.GetFace();
+
+        if(vertice_count_ > VERTEX_NUMBER) {
+            std::cerr << "Exceded VERTEX_NUMBER.\n" << std::endl;
+        }
+    }
+}
+
+void PlanetSceneNode::Populate2(){
     vertice_count_ = 0;
     face_count_ = 0;
     for(auto it_point = Point::all_points_.begin(); it_point!=Point::all_points_.end(); ++it_point){

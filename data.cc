@@ -4,22 +4,32 @@
 
 std::map<PolarCoord, std::shared_ptr<Point> > Point::all_points_;
 
-int Point::ClampAngle(int value){
-    while(value >= CIRCLE_DIVISIONS){
-        value -= CIRCLE_DIVISIONS;
+PolarCoord Point::ClampAngle(PolarCoord coordinate){
+    int radius = std::get<0>(coordinate);
+    int lattitude = std::get<1>(coordinate);
+    int longditude = std::get<2>(coordinate);
+
+    while(lattitude > CIRCLE_DIVISIONS /4){
+        lattitude = CIRCLE_DIVISIONS /4;
     }
-    while(value < 0){
-        value += CIRCLE_DIVISIONS;
+    while(lattitude < -CIRCLE_DIVISIONS /4){
+        lattitude = -CIRCLE_DIVISIONS /4;
     }
 
-    return value;
+    while(longditude >= CIRCLE_DIVISIONS){
+        longditude -= CIRCLE_DIVISIONS;
+    }
+    while(longditude < 0){
+        longditude += CIRCLE_DIVISIONS;
+    }
+
+    return PolarCoord(radius, lattitude, longditude);
 }
 
 std::shared_ptr<Point> Point::GetInstance(PolarCoord coordinate){
     // TODO Lock Point::all_points_ so this is threadsafe.
 
-    std::get<1>(coordinate) = Point::ClampAngle(std::get<1>(coordinate));
-    std::get<2>(coordinate) = Point::ClampAngle(std::get<2>(coordinate));
+    coordinate = ClampAngle(coordinate);
 
     auto pointer = all_points_.find(coordinate);
     if(pointer != all_points_.end()){
@@ -101,13 +111,15 @@ void bootstrap() {
             last_point_high(nullptr), last_point_low(nullptr);
 
     for(int p = 0; p < CIRCLE_DIVISIONS; p += CIRCLE_DIVISIONS / 5){
-        new_point_high = Point::GetInstance(PolarCoord(WORLD_RADIUS, CIRCLE_DIVISIONS / 10, p));
+        //new_point_high = Point::GetInstance(PolarCoord(WORLD_RADIUS, CIRCLE_DIVISIONS / 10, p));
+        new_point_high = Point::GetInstance(PolarCoord(WORLD_RADIUS, CIRCLE_DIVISIONS * .08, p));
         root_node->AddNeighbour(new_point_high);
         if(last_point_high){
             last_point_high->AddNeighbour(new_point_high);
         }
 
-        new_point_low = Point::GetInstance(PolarCoord(WORLD_RADIUS, -CIRCLE_DIVISIONS / 10, p - (CIRCLE_DIVISIONS / 10)));
+        //new_point_low = Point::GetInstance(PolarCoord(WORLD_RADIUS, -CIRCLE_DIVISIONS / 10, p - (CIRCLE_DIVISIONS / 10)));
+        new_point_low = Point::GetInstance(PolarCoord(WORLD_RADIUS, -CIRCLE_DIVISIONS * .08, p - (CIRCLE_DIVISIONS / 10)));
         bottom_node->AddNeighbour(new_point_low);
         if(last_point_low){
             last_point_low->AddNeighbour(new_point_low);
@@ -137,3 +149,55 @@ void bootstrap() {
     last_point_high->AddNeighbour(first_point_low);
 }
 
+Face FaceIterator::GetFace(){
+    //std::cout << "FaceIterator::GetFace()" << std::endl;
+    std::shared_ptr<Point> p1, p2, p3;
+    
+    while(it_point_ != Point::all_points_.end()){
+        p1 = it_point_->second;
+
+        if(p1->recursion_ == target_recursion_){
+            //for( ; it_neghbours_1_ < p1->neighbours_count_; ++it_neghbours_1_){
+            while(it_neghbours_1_ < p1->neighbours_count_){
+                if(p1->neighbours_[it_neghbours_1_] && p1->neighbours_[it_neghbours_1_]->lattitude_ < p1->lattitude_){
+                    p2 = p1->neighbours_[it_neghbours_1_];
+                    // p2 is below first Point.
+                    if(p1->lattitude_ == CIRCLE_DIVISIONS/4 ||   // When lattitude_ is at top of globe, we can't compare longditudes.
+                            (p1->longditude_ - p2->longditude_ >= 0 && 
+                            p1->longditude_ - p2->longditude_ < CIRCLE_DIVISIONS /2) ||
+                            (p1->longditude_ - p2->longditude_ < -CIRCLE_DIVISIONS /2)){
+                        // p2 is to the left of p1.
+                        for( ; it_neghbours_2_ < p2->neighbours_count_; ++it_neghbours_2_){
+                            if(p2->neighbours_[it_neghbours_2_] && p2->neighbours_[it_neghbours_2_]->lattitude_ == p2->lattitude_){
+                                // Second and third Points are at the same lattitude.
+                                p3 = p2->neighbours_[it_neghbours_2_];
+                                if((p3->longditude_ - p2->longditude_ >= 0 &&                            
+                                        p3->longditude_ - p2->longditude_ < CIRCLE_DIVISIONS /2) ||
+                                        (p3->longditude_ - p2->longditude_ < -CIRCLE_DIVISIONS /2)){
+                                    // p3 is right od p2.
+                                    if(p1->IsNeighbour(p3)){
+                                        // p1 and p3 are neighbours so p1, p2 & p3 form a Face.
+                                        std::cout << "* " << p1->lattitude_ << "," << p1->longditude_ << "\t" <<
+                                            p2->lattitude_ << "," << p2->longditude_ << "\t" <<
+                                            p3->lattitude_ << "," << p3->longditude_ << "\t" <<
+                                            std::endl;
+                                        //++it_point_;
+                                        ++it_neghbours_2_;
+                                        return Face {p1, p2, p3};
+                                    }
+                                }
+                            }
+                        }
+                        it_neghbours_2_ = 0;
+                    }
+                }
+                ++it_neghbours_1_;
+            }
+            it_neghbours_1_ = 0;
+        }
+
+        ++it_point_;
+    }
+
+    return end();
+}

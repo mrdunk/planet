@@ -67,18 +67,33 @@ TEST(Data, PointNeighbours){
 TEST(Data, ClampAngle){
     Point::all_points_.clear();
 
-    EXPECT_EQ(5, Point::ClampAngle((CIRCLE_DIVISIONS * 7) + 5));
-    EXPECT_EQ(5, Point::ClampAngle((-CIRCLE_DIVISIONS * 7) + 5));
+    PolarCoord coordinate_1(0, 10, 20);
+    coordinate_1 = Point::ClampAngle(coordinate_1);
+    EXPECT_EQ(10, std::get<1>(coordinate_1));
+    EXPECT_EQ(20, std::get<2>(coordinate_1));
 
-    PolarCoord coordinate(0, CIRCLE_DIVISIONS + 101, -CIRCLE_DIVISIONS + 101);
-    std::get<1>(coordinate) = Point::ClampAngle(std::get<1>(coordinate));
-    std::get<2>(coordinate) = Point::ClampAngle(std::get<2>(coordinate));
+    PolarCoord coordinate_2(0, -10, -20);
+    coordinate_2 = Point::ClampAngle(coordinate_2);
+    EXPECT_EQ(-10, std::get<1>(coordinate_2));
+    EXPECT_EQ(CIRCLE_DIVISIONS -20, std::get<2>(coordinate_2));
 
-    EXPECT_EQ(101, std::get<1>(coordinate));
-    EXPECT_EQ(101, std::get<2>(coordinate));
+    PolarCoord coordinate_3(0, CIRCLE_DIVISIONS, 0);
+    coordinate_3 = Point::ClampAngle(coordinate_3);
+    EXPECT_EQ(CIRCLE_DIVISIONS /4, std::get<1>(coordinate_3));
+
+    PolarCoord coordinate_4(0, -CIRCLE_DIVISIONS, 0);
+    coordinate_4 = Point::ClampAngle(coordinate_4);
+    EXPECT_EQ(-CIRCLE_DIVISIONS /4, std::get<1>(coordinate_4));
+
+    PolarCoord coordinate_5(0, 0, CIRCLE_DIVISIONS +10);
+    coordinate_5 = Point::ClampAngle(coordinate_5);
+    EXPECT_EQ(10, std::get<2>(coordinate_5));
 }
 
 TEST(Math, ToCartesian){
+    const int PARTWAY = 0.707 * WORLD_RADIUS;
+    const int HALFWAY = 0.5 * WORLD_RADIUS;
+
     PolarCoord centre_polar(0, 0, 0);
     CartesianCoord cartesian = ToCartesian(centre_polar);
 
@@ -163,64 +178,64 @@ TEST(Math, ToCartesian){
     cartesian = ToCartesian(meridian_45_polar);
 
     EXPECT_EQ(0, C_X(cartesian));
-    EXPECT_EQ(707, C_Y(cartesian));
-    EXPECT_EQ(707, C_Z(cartesian));
+    EXPECT_EQ(PARTWAY, C_Y(cartesian));
+    EXPECT_EQ(PARTWAY, C_Z(cartesian));
 
 
     PolarCoord meridian_n45_polar(WORLD_RADIUS, -CIRCLE_DIVISIONS / 8, 0);
     cartesian = ToCartesian(meridian_n45_polar);
 
     EXPECT_EQ(0, C_X(cartesian));
-    EXPECT_EQ(707, C_Y(cartesian));
-    EXPECT_EQ(-707, C_Z(cartesian));
+    EXPECT_EQ(PARTWAY, C_Y(cartesian));
+    EXPECT_EQ(-PARTWAY, C_Z(cartesian));
 
 
     PolarCoord meridian_n45_polar_2(WORLD_RADIUS, 7 * CIRCLE_DIVISIONS / 8, 0);
     cartesian = ToCartesian(meridian_n45_polar_2);
 
     EXPECT_EQ(0, C_X(cartesian));
-    EXPECT_EQ(707, C_Y(cartesian));
-    EXPECT_EQ(-707, C_Z(cartesian));
+    EXPECT_EQ(PARTWAY, C_Y(cartesian));
+    EXPECT_EQ(-PARTWAY, C_Z(cartesian));
 
 
     PolarCoord right45_up0_polar(WORLD_RADIUS, 0, CIRCLE_DIVISIONS / 8);
     cartesian = ToCartesian(right45_up0_polar);
 
-    EXPECT_EQ(707, C_X(cartesian));
-    EXPECT_EQ(707, C_Y(cartesian));
+    EXPECT_EQ(PARTWAY, C_X(cartesian));
+    EXPECT_EQ(PARTWAY, C_Y(cartesian));
     EXPECT_EQ(0, C_Z(cartesian));
 
 
     PolarCoord right45_up45_polar(WORLD_RADIUS, CIRCLE_DIVISIONS / 8, CIRCLE_DIVISIONS / 8);
     cartesian = ToCartesian(right45_up45_polar);
 
-    EXPECT_EQ(500, C_X(cartesian));
-    EXPECT_EQ(500, C_Y(cartesian));
-    EXPECT_EQ(707, C_Z(cartesian));
+    EXPECT_EQ(HALFWAY, C_X(cartesian));
+    EXPECT_EQ(HALFWAY, C_Y(cartesian));
+    EXPECT_EQ(PARTWAY, C_Z(cartesian));
 
 
     PolarCoord left45_up45_polar(WORLD_RADIUS, CIRCLE_DIVISIONS / 8, -CIRCLE_DIVISIONS / 8);
     cartesian = ToCartesian(left45_up45_polar);
 
-    EXPECT_EQ(-500, C_X(cartesian));
-    EXPECT_EQ(500, C_Y(cartesian));
-    EXPECT_EQ(707, C_Z(cartesian));
+    EXPECT_EQ(-HALFWAY, C_X(cartesian));
+    EXPECT_EQ(HALFWAY, C_Y(cartesian));
+    EXPECT_EQ(PARTWAY, C_Z(cartesian));
 
 
     PolarCoord right45_down45_polar(WORLD_RADIUS, -CIRCLE_DIVISIONS / 8, CIRCLE_DIVISIONS / 8);
     cartesian = ToCartesian(right45_down45_polar);
 
-    EXPECT_EQ(500, C_X(cartesian));
-    EXPECT_EQ(500, C_Y(cartesian));
-    EXPECT_EQ(-707, C_Z(cartesian));
+    EXPECT_EQ(HALFWAY, C_X(cartesian));
+    EXPECT_EQ(HALFWAY, C_Y(cartesian));
+    EXPECT_EQ(-PARTWAY, C_Z(cartesian));
 
 
     PolarCoord left45_down45_polar(WORLD_RADIUS, -CIRCLE_DIVISIONS / 8, -CIRCLE_DIVISIONS / 8);
     cartesian = ToCartesian(left45_down45_polar);
 
-    EXPECT_EQ(-500, C_X(cartesian));
-    EXPECT_EQ(500, C_Y(cartesian));
-    EXPECT_EQ(-707, C_Z(cartesian));
+    EXPECT_EQ(-HALFWAY, C_X(cartesian));
+    EXPECT_EQ(HALFWAY, C_Y(cartesian));
+    EXPECT_EQ(-PARTWAY, C_Z(cartesian));
 }
 
 TEST(Data, Bootstrap){

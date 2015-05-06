@@ -60,6 +60,7 @@ class PlanetSceneNode : public scene::ISceneNode {
     }
 
     void Populate();
+    void Populate2();
 };
 
 #endif  // __PLANET_IRRLICHT__
