@@ -80,7 +80,7 @@ data_test : data.o data_test.o planetMath.o gtest_main.a
 
 
 # Builds main program.
-planetIrrlicht.o : $(USER_DIR)/planetIrrlicht.h $(USER_DIR)/planetIrrlicht.cc $(USER_DIR)/defines.h
+planetIrrlicht.o : $(USER_DIR)/planetIrrlicht.h $(USER_DIR)/planetIrrlicht.cc $(USER_DIR)/defines.h $(USER_DIR)/planetMath.cc $(USER_DIR)/planetMath.h $(USER_DIR)/data.cc $(USER_DIR)/data.h
 	$(warning Building irrlicht...)
 	$(CXX) $(CPPFLAGS_PLANET) $(CXXFLAGS) -c $(USER_DIR)/planetIrrlicht.cc
 

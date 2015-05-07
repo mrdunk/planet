@@ -2,7 +2,7 @@
 #define __PLANET_DEFINES__
 
 
-#define WORLD_RADIUS 100
+#define WORLD_RADIUS 1100
 #define CIRCLE_DIVISIONS 10000
 
 

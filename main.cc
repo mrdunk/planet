@@ -16,17 +16,18 @@ int main()
 {
     // Initialise planet data.
     bootstrap();
-
+    bootstrap2();
 
     // Driver type. OpenGL, DirectX, SW, etc.
-    video::E_DRIVER_TYPE driverType = (video::E_DRIVER_TYPE)5;  // driverChoiceConsole();
+    video::E_DRIVER_TYPE driverType = (video::E_DRIVER_TYPE)5;
+    //video::E_DRIVER_TYPE driverType = driverChoiceConsole();
     if (driverType==video::EDT_COUNT) {
         return 1;
     }
 
     // create device
     IrrlichtDevice *device = createDevice(driverType,
-            core::dimension2d<u32>(640, 640), 16, false);
+            core::dimension2d<u32>(640, 640), 16, false, false, false, 0);
 
     if (device == 0) {
         return 1; // could not create selected driver.
@@ -38,11 +39,11 @@ int main()
     video::IVideoDriver* driver = device->getVideoDriver();
     scene::ISceneManager* scene_manager = device->getSceneManager();
 
-    scene_manager->addCameraSceneNode(0, core::vector3df(100, -WORLD_RADIUS *4, 0), core::vector3df(0,0,0));
+    irr::scene::ICameraSceneNode* cam = scene_manager->addCameraSceneNode(0, core::vector3df(100, -WORLD_RADIUS *4, 0), core::vector3df(0,0,0));
+    cam->setFarValue(WORLD_RADIUS *5);
 
     PlanetSceneNode *planet_node =
         new PlanetSceneNode(scene_manager->getRootSceneNode(), scene_manager, 666);
-
 
     scene::ISceneNodeAnimator* anim =
         scene_manager->createRotationAnimator(core::vector3df(0.25f, 0, 0));
