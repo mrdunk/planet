@@ -95,7 +95,7 @@ class FaceIterator {
 };
 
 void bootstrap();
-void bootstrap2();
+void bootstrap2(int recursion_to_split);
 
 
 #endif  // __PLANET_DATA__

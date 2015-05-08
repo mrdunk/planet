@@ -97,13 +97,13 @@ void bootstrap() {
             last_point_high(nullptr), last_point_low(nullptr);
 
     for(int p = 0; p < CIRCLE_DIVISIONS; p += CIRCLE_DIVISIONS / 5){
-        new_point_high = Point::GetInstance(0, PolarCoord(0, CIRCLE_DIVISIONS * .08, p));
+        new_point_high = Point::GetInstance(0, PolarCoord(0, CIRCLE_DIVISIONS * .075, p));
         root_node->AddNeighbour(new_point_high);
         if(last_point_high){
             last_point_high->AddNeighbour(new_point_high);
         }
 
-        new_point_low = Point::GetInstance(0, PolarCoord(0, -CIRCLE_DIVISIONS * .08, p - (CIRCLE_DIVISIONS / 10)));
+        new_point_low = Point::GetInstance(0, PolarCoord(0, -CIRCLE_DIVISIONS * .075, p - (CIRCLE_DIVISIONS / 10)));
         bottom_node->AddNeighbour(new_point_low);
         if(last_point_low){
             last_point_low->AddNeighbour(new_point_low);
@@ -133,13 +133,13 @@ void bootstrap() {
     last_point_high->AddNeighbour(first_point_low);
 }
 
-void bootstrap2() {
+void bootstrap2(int recursion_to_split) {
     // TESTING
     std::cout << "Point::all_points_.size(): " << Point::all_points_.size() << std::endl;
 
     std::vector<Face> new_faces;
 
-    auto it_face = FaceIterator(0);
+    auto it_face = FaceIterator(recursion_to_split);
     Face face = it_face.begin();
     while(face != it_face.end()){
         //face.Split();
@@ -162,9 +162,42 @@ void Face::Split(){
     PolarCoord new_p1_coord(new_recursion, p1_->lattitude_, p1_->longditude_);
     PolarCoord new_p2_coord(new_recursion, p2_->lattitude_, p2_->longditude_);
 
-    PolarCoord new_p01_coord(new_recursion, (p0_->lattitude_ + p1_->lattitude_) /2, (p0_->longditude_ + p1_->longditude_) /2);
-    PolarCoord new_p12_coord(new_recursion, (p1_->lattitude_ + p2_->lattitude_) /2, (p1_->longditude_ + p2_->longditude_) /2);
-    PolarCoord new_p20_coord(new_recursion, (p2_->lattitude_ + p0_->lattitude_) /2, (p2_->longditude_ + p0_->longditude_) /2);
+    int average_longditude_0_1, average_longditude_1_2, average_longditude_2_0;
+
+    if(abs(p0_->lattitude_) == CIRCLE_DIVISIONS /4){
+        average_longditude_0_1 = p1_->longditude_;
+    } else if(abs(p1_->lattitude_) == CIRCLE_DIVISIONS /4){
+        average_longditude_0_1 = p0_->longditude_;
+    } else if(abs(p0_->longditude_ - p1_->longditude_) > CIRCLE_DIVISIONS /2){
+        average_longditude_0_1 = (p0_->longditude_ + p1_->longditude_ + CIRCLE_DIVISIONS) /2;
+    } else {
+        average_longditude_0_1 = (p0_->longditude_ + p1_->longditude_) /2;
+    }
+
+    if(abs(p1_->lattitude_) == CIRCLE_DIVISIONS /4){
+        average_longditude_1_2 = p2_->longditude_;
+    } else if(abs(p2_->lattitude_) == CIRCLE_DIVISIONS /4){
+        average_longditude_1_2 = p1_->longditude_;
+    } else if(abs(p1_->longditude_ - p2_->longditude_) > CIRCLE_DIVISIONS /2){
+        average_longditude_1_2 = (p1_->longditude_ + p2_->longditude_ + CIRCLE_DIVISIONS) /2;
+    } else {
+        average_longditude_1_2 = (p1_->longditude_ + p2_->longditude_) /2;
+    }
+
+    if(abs(p2_->lattitude_) == CIRCLE_DIVISIONS /4){
+        average_longditude_2_0 = p0_->longditude_;
+    } else if(abs(p0_->lattitude_) == CIRCLE_DIVISIONS /4){
+        average_longditude_2_0 = p2_->longditude_;
+    } else if(abs(p2_->longditude_ - p0_->longditude_) > CIRCLE_DIVISIONS /2){
+        average_longditude_2_0 = (p2_->longditude_ + p0_->longditude_ + CIRCLE_DIVISIONS) /2;
+    } else {
+        average_longditude_2_0 = (p2_->longditude_ + p0_->longditude_) /2;
+    }
+
+
+    PolarCoord new_p01_coord(new_recursion, (p0_->lattitude_ + p1_->lattitude_) /2, average_longditude_0_1);
+    PolarCoord new_p12_coord(new_recursion, (p1_->lattitude_ + p2_->lattitude_) /2, average_longditude_1_2);
+    PolarCoord new_p20_coord(new_recursion, (p2_->lattitude_ + p0_->lattitude_) /2, average_longditude_2_0);
 
     std::shared_ptr<Point> new_p0 = Point::GetInstance(new_recursion, new_p0_coord);
     std::shared_ptr<Point> new_p1 = Point::GetInstance(new_recursion, new_p1_coord);
@@ -189,8 +222,11 @@ void Face::Split(){
         new_p2->parent_ = p2_;
         new_p2->AddNeighbour(new_p12);
         new_p2->AddNeighbour(new_p20);
+
+        new_p01->AddNeighbour(new_p12);
+        new_p12->AddNeighbour(new_p20);
+        new_p20->AddNeighbour(new_p01);
     
-    std::cout << "new_p0->neighbours_count_: " << new_p0->neighbours_count_ << std::endl;
 }
 
 
@@ -199,17 +235,14 @@ const Face FaceIterator::GetFace(){
     std::shared_ptr<Point> p1, p2, p3;
     
     while(it_point_ != Point::all_points_.end()){
-        std::cout << ".";
         p1 = it_point_->second;
 
         if(p1->recursion_ == target_recursion_){
-            std::cout << "+";
             for( ; it_neghbours_1_ < p1->neighbours_count_; ++it_neghbours_1_){
 
                 // Point up triangle.
                 if(p1->neighbours_[it_neghbours_1_] && p1->neighbours_[it_neghbours_1_]->lattitude_ < p1->lattitude_){
                     p2 = p1->neighbours_[it_neghbours_1_];
-                    std::cout << "1";
                     // p2 is below first Point.
                     if(p1->lattitude_ == CIRCLE_DIVISIONS/4 ||   // When lattitude_ is at top of globe, we can't compare longditudes.
                             (p1->longditude_ - p2->longditude_ >= 0 && 
@@ -218,7 +251,6 @@ const Face FaceIterator::GetFace(){
                         // p2 is to the left of p1.
                         for( ; it_neghbours_2_ < p2->neighbours_count_; ++it_neghbours_2_){
                             if(p2->neighbours_[it_neghbours_2_] && p2->neighbours_[it_neghbours_2_]->lattitude_ == p2->lattitude_){
-                                std::cout << "2";
                                 // Second and third Points are at the same lattitude.
                                 p3 = p2->neighbours_[it_neghbours_2_];
                                 if((p3->longditude_ - p2->longditude_ >= 0 &&                            

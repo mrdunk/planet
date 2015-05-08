@@ -16,7 +16,10 @@ int main()
 {
     // Initialise planet data.
     bootstrap();
-    bootstrap2();
+    bootstrap2(0);
+    bootstrap2(1);
+    bootstrap2(2);
+    bootstrap2(3);
 
     // Driver type. OpenGL, DirectX, SW, etc.
     video::E_DRIVER_TYPE driverType = (video::E_DRIVER_TYPE)5;
@@ -39,14 +42,14 @@ int main()
     video::IVideoDriver* driver = device->getVideoDriver();
     scene::ISceneManager* scene_manager = device->getSceneManager();
 
-    irr::scene::ICameraSceneNode* cam = scene_manager->addCameraSceneNode(0, core::vector3df(100, -WORLD_RADIUS *4, 0), core::vector3df(0,0,0));
+    irr::scene::ICameraSceneNode* cam = scene_manager->addCameraSceneNode(0, core::vector3df(-WORLD_RADIUS *4, 0, 0), core::vector3df(0,0,0));
     cam->setFarValue(WORLD_RADIUS *5);
 
     PlanetSceneNode *planet_node =
         new PlanetSceneNode(scene_manager->getRootSceneNode(), scene_manager, 666);
 
     scene::ISceneNodeAnimator* anim =
-        scene_manager->createRotationAnimator(core::vector3df(0.25f, 0, 0));
+        scene_manager->createRotationAnimator(core::vector3df(0, 0, 0));
 
     if(anim) {
         planet_node->addAnimator(anim);

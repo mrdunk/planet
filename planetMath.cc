@@ -23,3 +23,6 @@ void DisplayPolarCoord(const PolarCoord coordinate) {
     std::cout << "height: " << C_HEIGHT(coordinate) / PI << "\tlattitude: " << 180 * C_LATT(coordinate) / PI << "\tlongditude: " << 180 * C_LONG(coordinate) / PI << std::endl;
 }
 
+int DistanceBetween(CartesianCoord c0, CartesianCoord c1) {
+        return sqrt((C_X(c0) - C_X(c1)) * (C_X(c0) - C_X(c1)) + (C_Y(c0) - C_Y(c1)) * (C_Y(c0) - C_Y(c1)) + (C_Z(c0) - C_Z(c1)) * (C_Z(c0) - C_Z(c1)));
+}

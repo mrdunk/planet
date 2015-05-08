@@ -240,6 +240,13 @@ TEST(Data, Bootstrap){
 
     for(auto it = Point::all_points_.begin(); it!=Point::all_points_.end(); ++it){
         EXPECT_EQ(5, it->second->neighbours_count_);
+
+        CartesianCoord c0 = it->second->GetCartesianCoord();
+        for(int i = 0; i < it->second->neighbours_count_ ; ++i){
+            CartesianCoord c1 = it->second->neighbours_[i]->GetCartesianCoord();
+            std::cout << DistanceBetween(c0, c1) << "\t";
+        }
+        std::cout << std::endl;
     }
 }
 
@@ -280,9 +287,9 @@ TEST(Data, FaceSplit){
     EXPECT_EQ(2, p0_1->neighbours_count_);
     EXPECT_EQ(2, p1_1->neighbours_count_);
     EXPECT_EQ(2, p2_1->neighbours_count_);
-    EXPECT_EQ(2, p01_1->neighbours_count_);
-    EXPECT_EQ(2, p12_1->neighbours_count_);
-    EXPECT_EQ(2, p20_1->neighbours_count_);
+    EXPECT_EQ(4, p01_1->neighbours_count_);
+    EXPECT_EQ(4, p12_1->neighbours_count_);
+    EXPECT_EQ(4, p20_1->neighbours_count_);
 
     EXPECT_TRUE(p0_1->IsNeighbour(p01_1));
     EXPECT_TRUE(p0_1->IsNeighbour(p20_1));
@@ -290,6 +297,9 @@ TEST(Data, FaceSplit){
     EXPECT_TRUE(p1_1->IsNeighbour(p12_1));
     EXPECT_TRUE(p2_1->IsNeighbour(p12_1));
     EXPECT_TRUE(p2_1->IsNeighbour(p20_1));
+    EXPECT_TRUE(p01_1->IsNeighbour(p12_1));
+    EXPECT_TRUE(p12_1->IsNeighbour(p20_1));
+    EXPECT_TRUE(p20_1->IsNeighbour(p01_1));
 }
 
 

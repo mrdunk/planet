@@ -8,7 +8,7 @@
 
 #include "data.h"
 
-#define VERTEX_NUMBER 1024
+#define VERTEX_NUMBER 64000
 
 using namespace irr;
 

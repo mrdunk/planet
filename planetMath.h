@@ -26,4 +26,6 @@ CartesianCoord ToCartesian(const PolarCoord polar_coord);
 void DisplayCoord(const CartesianCoord coordinate);
 void DisplayPolarCoord(const PolarCoord coordinate);
 
+int DistanceBetween(CartesianCoord c0, CartesianCoord c1);
+
 #endif  // __PLANET_MATH__
