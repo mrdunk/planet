@@ -98,137 +98,308 @@ TEST(Math, ToCartesian){
     PolarCoord top_polar(0, CIRCLE_DIVISIONS / 4, 0);
     CartesianCoord cartesian = ToCartesian(top_polar);
 
-    EXPECT_EQ(0, C_X(cartesian));
-    EXPECT_EQ(0, C_Y(cartesian));
-    EXPECT_EQ(WORLD_RADIUS, C_Z(cartesian));
+    EXPECT_EQ(0, round(C_X(cartesian)));
+    EXPECT_EQ(0, round(C_Y(cartesian)));
+    EXPECT_EQ(WORLD_RADIUS, round(C_Z(cartesian)));
 
 
     PolarCoord top_polar_2(0, CIRCLE_DIVISIONS / 4, CIRCLE_DIVISIONS / 4);
     cartesian = ToCartesian(top_polar_2);
 
-    EXPECT_EQ(0, C_X(cartesian));
-    EXPECT_EQ(0, C_Y(cartesian));
-    EXPECT_EQ(WORLD_RADIUS, C_Z(cartesian));
+    EXPECT_EQ(0, round(C_X(cartesian)));
+    EXPECT_EQ(0, round(C_Y(cartesian)));
+    EXPECT_EQ(WORLD_RADIUS, round(C_Z(cartesian)));
 
 
     PolarCoord meridian_equator_polar(0, 0, 0);
     cartesian = ToCartesian(meridian_equator_polar);
 
-    EXPECT_EQ(0, C_X(cartesian));
-    EXPECT_EQ(WORLD_RADIUS, C_Y(cartesian));
-    EXPECT_EQ(0, C_Z(cartesian));
+    EXPECT_EQ(0, round(C_X(cartesian)));
+    EXPECT_EQ(WORLD_RADIUS, round(C_Y(cartesian)));
+    EXPECT_EQ(0, round(C_Z(cartesian)));
 
 
     PolarCoord bottom_polar(0, -CIRCLE_DIVISIONS / 4, 0);
     cartesian = ToCartesian(bottom_polar);
 
-    EXPECT_EQ(0, C_X(cartesian));
-    EXPECT_EQ(0, C_Y(cartesian));
-    EXPECT_EQ(-WORLD_RADIUS, C_Z(cartesian));
+    EXPECT_EQ(0, round(C_X(cartesian)));
+    EXPECT_EQ(0, round(C_Y(cartesian)));
+    EXPECT_EQ(-WORLD_RADIUS, round(C_Z(cartesian)));
 
 
     PolarCoord bottom_polar_2(0, -CIRCLE_DIVISIONS / 4, CIRCLE_DIVISIONS / 4);
     cartesian = ToCartesian(bottom_polar_2);
 
-    EXPECT_EQ(0, C_X(cartesian));
-    EXPECT_EQ(0, C_Y(cartesian));
-    EXPECT_EQ(-WORLD_RADIUS, C_Z(cartesian));
+    EXPECT_EQ(0, round(C_X(cartesian)));
+    EXPECT_EQ(0, round(C_Y(cartesian)));
+    EXPECT_EQ(-WORLD_RADIUS, round(C_Z(cartesian)));
 
 
     PolarCoord m90_equator_polar(0, 0, CIRCLE_DIVISIONS / 4);
     cartesian = ToCartesian(m90_equator_polar);
 
-    EXPECT_EQ(WORLD_RADIUS, C_X(cartesian));
-    EXPECT_EQ(0, C_Y(cartesian));
-    EXPECT_EQ(0, C_Z(cartesian));
+    EXPECT_EQ(WORLD_RADIUS, round(C_X(cartesian)));
+    EXPECT_EQ(0, round(C_Y(cartesian)));
+    EXPECT_EQ(0, round(C_Z(cartesian)));
 
 
     PolarCoord m180_equator_polar(0, 0, CIRCLE_DIVISIONS / 2);
     cartesian = ToCartesian(m180_equator_polar);
 
-    EXPECT_EQ(0, C_X(cartesian));
-    EXPECT_EQ(-WORLD_RADIUS, C_Y(cartesian));
-    EXPECT_EQ(0, C_Z(cartesian));
+    EXPECT_EQ(0, round(C_X(cartesian)));
+    EXPECT_EQ(-WORLD_RADIUS, round(C_Y(cartesian)));
+    EXPECT_EQ(0, round(C_Z(cartesian)));
 
 
     PolarCoord m270_equator_polar(0, 0, -CIRCLE_DIVISIONS / 4);
     cartesian = ToCartesian(m270_equator_polar);
 
-    EXPECT_EQ(-WORLD_RADIUS, C_X(cartesian));
-    EXPECT_EQ(0, C_Y(cartesian));
-    EXPECT_EQ(0, C_Z(cartesian));
+    EXPECT_EQ(-WORLD_RADIUS, round(C_X(cartesian)));
+    EXPECT_EQ(0, round(C_Y(cartesian)));
+    EXPECT_EQ(0, round(C_Z(cartesian)));
 
 
     PolarCoord m270_equator_polar_2(0, 0, 3 * CIRCLE_DIVISIONS / 4);
     cartesian = ToCartesian(m270_equator_polar_2);
 
-    EXPECT_EQ(-WORLD_RADIUS, C_X(cartesian));
-    EXPECT_EQ(0, C_Y(cartesian));
-    EXPECT_EQ(0, C_Z(cartesian));
+    EXPECT_EQ(-WORLD_RADIUS, round(C_X(cartesian)));
+    EXPECT_EQ(0, round(C_Y(cartesian)));
+    EXPECT_EQ(0, round(C_Z(cartesian)));
 
 
     PolarCoord meridian_45_polar(0, CIRCLE_DIVISIONS / 8, 0);
     cartesian = ToCartesian(meridian_45_polar);
 
-    EXPECT_EQ(0, C_X(cartesian));
-    EXPECT_EQ(PARTWAY, C_Y(cartesian));
-    EXPECT_EQ(PARTWAY, C_Z(cartesian));
+    EXPECT_EQ(0, round(C_X(cartesian)));
+    EXPECT_EQ(PARTWAY, round(C_Y(cartesian)));
+    EXPECT_EQ(PARTWAY, round(C_Z(cartesian)));
 
 
     PolarCoord meridian_n45_polar(0, -CIRCLE_DIVISIONS / 8, 0);
     cartesian = ToCartesian(meridian_n45_polar);
 
-    EXPECT_EQ(0, C_X(cartesian));
-    EXPECT_EQ(PARTWAY, C_Y(cartesian));
-    EXPECT_EQ(-PARTWAY, C_Z(cartesian));
+    EXPECT_EQ(0, round(C_X(cartesian)));
+    EXPECT_EQ(PARTWAY, round(C_Y(cartesian)));
+    EXPECT_EQ(-PARTWAY, round(C_Z(cartesian)));
 
 
     PolarCoord meridian_n45_polar_2(0, 7 * CIRCLE_DIVISIONS / 8, 0);
     cartesian = ToCartesian(meridian_n45_polar_2);
 
-    EXPECT_EQ(0, C_X(cartesian));
-    EXPECT_EQ(PARTWAY, C_Y(cartesian));
-    EXPECT_EQ(-PARTWAY, C_Z(cartesian));
+    EXPECT_EQ(0, round(C_X(cartesian)));
+    EXPECT_EQ(PARTWAY, round(C_Y(cartesian)));
+    EXPECT_EQ(-PARTWAY, round(C_Z(cartesian)));
 
 
     PolarCoord right45_up0_polar(0, 0, CIRCLE_DIVISIONS / 8);
     cartesian = ToCartesian(right45_up0_polar);
 
-    EXPECT_EQ(PARTWAY, C_X(cartesian));
-    EXPECT_EQ(PARTWAY, C_Y(cartesian));
-    EXPECT_EQ(0, C_Z(cartesian));
+    EXPECT_EQ(PARTWAY, round(C_X(cartesian)));
+    EXPECT_EQ(PARTWAY, round(C_Y(cartesian)));
+    EXPECT_EQ(0, round(C_Z(cartesian)));
 
 
     PolarCoord right45_up45_polar(0, CIRCLE_DIVISIONS / 8, CIRCLE_DIVISIONS / 8);
     cartesian = ToCartesian(right45_up45_polar);
 
-    EXPECT_EQ(HALFWAY, C_X(cartesian));
-    EXPECT_EQ(HALFWAY, C_Y(cartesian));
-    EXPECT_EQ(PARTWAY, C_Z(cartesian));
+    EXPECT_EQ(HALFWAY, round(C_X(cartesian)));
+    EXPECT_EQ(HALFWAY, round(C_Y(cartesian)));
+    EXPECT_EQ(PARTWAY, round(C_Z(cartesian)));
 
 
     PolarCoord left45_up45_polar(0, CIRCLE_DIVISIONS / 8, -CIRCLE_DIVISIONS / 8);
     cartesian = ToCartesian(left45_up45_polar);
 
-    EXPECT_EQ(-HALFWAY, C_X(cartesian));
-    EXPECT_EQ(HALFWAY, C_Y(cartesian));
-    EXPECT_EQ(PARTWAY, C_Z(cartesian));
+    EXPECT_EQ(-HALFWAY, round(C_X(cartesian)));
+    EXPECT_EQ(HALFWAY, round(C_Y(cartesian)));
+    EXPECT_EQ(PARTWAY, round(C_Z(cartesian)));
 
 
     PolarCoord right45_down45_polar(0, -CIRCLE_DIVISIONS / 8, CIRCLE_DIVISIONS / 8);
     cartesian = ToCartesian(right45_down45_polar);
 
-    EXPECT_EQ(HALFWAY, C_X(cartesian));
-    EXPECT_EQ(HALFWAY, C_Y(cartesian));
-    EXPECT_EQ(-PARTWAY, C_Z(cartesian));
+    EXPECT_EQ(HALFWAY, round(C_X(cartesian)));
+    EXPECT_EQ(HALFWAY, round(C_Y(cartesian)));
+    EXPECT_EQ(-PARTWAY, round(C_Z(cartesian)));
 
 
     PolarCoord left45_down45_polar(0, -CIRCLE_DIVISIONS / 8, -CIRCLE_DIVISIONS / 8);
     cartesian = ToCartesian(left45_down45_polar);
 
-    EXPECT_EQ(-HALFWAY, C_X(cartesian));
-    EXPECT_EQ(HALFWAY, C_Y(cartesian));
-    EXPECT_EQ(-PARTWAY, C_Z(cartesian));
+    EXPECT_EQ(-HALFWAY, round(C_X(cartesian)));
+    EXPECT_EQ(HALFWAY, round(C_Y(cartesian)));
+    EXPECT_EQ(-PARTWAY, round(C_Z(cartesian)));
+}
+
+TEST(Math, ToPolar){
+    {
+        CartesianCoord cartesian(0, 0, 100);
+        PolarCoord polar = ToPolar(cartesian);
+
+        EXPECT_EQ(CIRCLE_DIVISIONS /4, round(C_LATT(polar)));
+        //EXPECT_EQ(0, C_LONG(polar));  // Longditude makes no sense right at pole.
+    }
+    {
+        CartesianCoord cartesian(0, 0, -100);
+        PolarCoord polar = ToPolar(cartesian);
+
+        EXPECT_EQ(-CIRCLE_DIVISIONS /4, round(C_LATT(polar)));
+        //EXPECT_EQ(0, C_LONG(polar));  // Longditude makes no sense right at pole.
+    }
+    {
+        CartesianCoord cartesian(100, 0, 0);
+        PolarCoord polar = ToPolar(cartesian);
+
+        EXPECT_EQ(0, round(C_LATT(polar)));
+        EXPECT_EQ(CIRCLE_DIVISIONS /4, C_LONG(polar));
+    }
+    {
+        CartesianCoord cartesian(-100, 0, 0);
+        PolarCoord polar = ToPolar(cartesian);
+
+        EXPECT_EQ(0, round(C_LATT(polar)));
+        EXPECT_EQ(3* CIRCLE_DIVISIONS /4, C_LONG(polar));
+    }
+    {
+        CartesianCoord cartesian(0, 100, 0);
+        PolarCoord polar = ToPolar(cartesian);
+
+        EXPECT_EQ(0, round(C_LATT(polar)));
+        EXPECT_EQ(0, C_LONG(polar));
+    }
+    {
+        CartesianCoord cartesian(0, -100, 0);
+        PolarCoord polar = ToPolar(cartesian);
+
+        EXPECT_EQ(0, round(C_LATT(polar)));
+        EXPECT_EQ(4* CIRCLE_DIVISIONS /8, C_LONG(polar));
+    }
+    {
+        CartesianCoord cartesian(100, 100, 0);
+        PolarCoord polar = ToPolar(cartesian);
+
+        EXPECT_EQ(0, round(C_LATT(polar)));
+        EXPECT_EQ(CIRCLE_DIVISIONS /8, C_LONG(polar));
+    }
+    {
+        CartesianCoord cartesian(100, -100, 0);
+        PolarCoord polar = ToPolar(cartesian);
+
+        EXPECT_EQ(0, round(C_LATT(polar)));
+        EXPECT_EQ(3* CIRCLE_DIVISIONS /8, C_LONG(polar));
+    }
+    {
+        CartesianCoord cartesian(-100, 100, 0);
+        PolarCoord polar = ToPolar(cartesian);
+
+        EXPECT_EQ(0, round(C_LATT(polar)));
+        EXPECT_EQ(7 * CIRCLE_DIVISIONS /8, C_LONG(polar));
+    }
+    {
+        CartesianCoord cartesian(-100, -100, 0);
+        PolarCoord polar = ToPolar(cartesian);
+
+        EXPECT_EQ(0, round(C_LATT(polar)));
+        EXPECT_EQ(5 * CIRCLE_DIVISIONS /8, C_LONG(polar));
+    }
+    {
+        CartesianCoord cartesian(100, 0, 100);
+        PolarCoord polar = ToPolar(cartesian);
+
+        EXPECT_EQ(CIRCLE_DIVISIONS /8, round(C_LATT(polar)));
+        EXPECT_EQ(CIRCLE_DIVISIONS /4, C_LONG(polar));
+    }
+    {
+        CartesianCoord cartesian(-100, 0, 100);
+        PolarCoord polar = ToPolar(cartesian);
+
+        EXPECT_EQ(CIRCLE_DIVISIONS /8, round(C_LATT(polar)));
+        EXPECT_EQ(3* CIRCLE_DIVISIONS /4, C_LONG(polar));
+    }
+    {
+        CartesianCoord cartesian(100, 0, -100);
+        PolarCoord polar = ToPolar(cartesian);
+
+        EXPECT_EQ(-CIRCLE_DIVISIONS /8, round(C_LATT(polar)));
+        EXPECT_EQ(CIRCLE_DIVISIONS /4, C_LONG(polar));
+    }
+    {
+        CartesianCoord cartesian(-100, 0, -100);
+        PolarCoord polar = ToPolar(cartesian);
+
+        EXPECT_EQ(-CIRCLE_DIVISIONS /8, round(C_LATT(polar)));
+        EXPECT_EQ(3* CIRCLE_DIVISIONS /4, C_LONG(polar));
+    }
+    {
+        CartesianCoord cartesian(100, 100, 100);
+        PolarCoord polar = ToPolar(cartesian);
+
+        EXPECT_EQ(980, round(C_LATT(polar)));
+        EXPECT_EQ(CIRCLE_DIVISIONS /8, C_LONG(polar));
+    }
+    {
+        CartesianCoord cartesian(-100, 100, 100);
+        PolarCoord polar = ToPolar(cartesian);
+
+        EXPECT_EQ(980, round(C_LATT(polar)));
+        EXPECT_EQ(7* CIRCLE_DIVISIONS /8, C_LONG(polar));
+    }
+    {
+        CartesianCoord cartesian(100, -100, 100);
+        PolarCoord polar = ToPolar(cartesian);
+
+        EXPECT_EQ(980, round(C_LATT(polar)));
+        EXPECT_EQ(3* CIRCLE_DIVISIONS /8, C_LONG(polar));
+    }
+    {
+        CartesianCoord cartesian(-100, -100, 100);
+        PolarCoord polar = ToPolar(cartesian);
+
+        EXPECT_EQ(980, round(C_LATT(polar)));
+        EXPECT_EQ(5* CIRCLE_DIVISIONS /8, C_LONG(polar));
+    }
+    {
+        CartesianCoord cartesian(100, 100, -100);
+        PolarCoord polar = ToPolar(cartesian);
+
+        EXPECT_EQ(-980, round(C_LATT(polar)));
+        EXPECT_EQ(CIRCLE_DIVISIONS /8, C_LONG(polar));
+    }
+    {
+        CartesianCoord cartesian(-100, 100, -100);
+        PolarCoord polar = ToPolar(cartesian);
+
+        EXPECT_EQ(-980, round(C_LATT(polar)));
+        EXPECT_EQ(7* CIRCLE_DIVISIONS /8, C_LONG(polar));
+    }
+    {
+        CartesianCoord cartesian(100, -100, -100);
+        PolarCoord polar = ToPolar(cartesian);
+
+        EXPECT_EQ(-980, round(C_LATT(polar)));
+        EXPECT_EQ(3* CIRCLE_DIVISIONS /8, C_LONG(polar));
+    }
+    {
+        CartesianCoord cartesian(-100, -100, -100);
+        PolarCoord polar = ToPolar(cartesian);
+
+        EXPECT_EQ(-980, round(C_LATT(polar)));
+        EXPECT_EQ(5* CIRCLE_DIVISIONS /8, C_LONG(polar));
+    }
+}
+
+TEST(Math, ToPolarToCartesian){
+    for(int iteration=0; iteration < 10000; ++ iteration){
+        int lattitude = (rand() % ((int)round(CIRCLE_DIVISIONS) /2)) - CIRCLE_DIVISIONS /4;
+        int longditude = rand() % (int)round(CIRCLE_DIVISIONS);
+        PolarCoord polar(0, lattitude, longditude);
+        //DisplayPolarCoord(polar);
+        CartesianCoord cartesian = ToCartesian(polar);
+        PolarCoord polar_2 = ToPolar(cartesian);
+
+        EXPECT_NEAR(C_LATT(polar), C_LATT(polar_2), 0.5);
+        EXPECT_NEAR(C_LONG(polar), C_LONG(polar_2), 0.5);
+    }
 }
 
 TEST(Data, Bootstrap){
@@ -254,8 +425,8 @@ TEST(Data, FaceSplit){
     Point::all_points_.clear();
 
     std::shared_ptr<Point> p0 = Point::GetInstance(0, PolarCoord(0, 0, 0));
-    std::shared_ptr<Point> p1 = Point::GetInstance(0, PolarCoord(0, 0, 20));
-    std::shared_ptr<Point> p2 = Point::GetInstance(0, PolarCoord(0, 20, 10));
+    std::shared_ptr<Point> p1 = Point::GetInstance(0, PolarCoord(0, 0, 200));
+    std::shared_ptr<Point> p2 = Point::GetInstance(0, PolarCoord(0, 200, 100));
 
     p0->AddNeighbour(p1);
     p1->AddNeighbour(p2);
@@ -270,6 +441,11 @@ TEST(Data, FaceSplit){
 
 
     face.Split();
+
+    for(auto it = Point::all_points_.begin(); it!=Point::all_points_.end(); ++it){
+        std::cout << it->second->recursion_ << "\t" ;
+        DisplayPolarCoord(it->second->GetPolarCoord());
+    }
     
     EXPECT_EQ(9, Point::all_points_.size());
     EXPECT_EQ(2, p0->neighbours_count_);
@@ -277,11 +453,11 @@ TEST(Data, FaceSplit){
     EXPECT_EQ(2, p2->neighbours_count_);
 
     std::shared_ptr<Point> p0_1 = Point::GetInstance(1, PolarCoord(0, 0, 0));
-    std::shared_ptr<Point> p1_1 = Point::GetInstance(1, PolarCoord(0, 0, 20));
-    std::shared_ptr<Point> p2_1 = Point::GetInstance(1, PolarCoord(0, 20, 10));
-    std::shared_ptr<Point> p01_1 = Point::GetInstance(1, PolarCoord(0, 0, 10));
-    std::shared_ptr<Point> p12_1 = Point::GetInstance(1, PolarCoord(0, 10, 15));
-    std::shared_ptr<Point> p20_1 = Point::GetInstance(1, PolarCoord(0, 10, 5));
+    std::shared_ptr<Point> p1_1 = Point::GetInstance(1, PolarCoord(0, 0, 200));
+    std::shared_ptr<Point> p2_1 = Point::GetInstance(1, PolarCoord(0, 200, 100));
+    std::shared_ptr<Point> p01_1 = Point::GetInstance(1, PolarCoord(0, 0, 100));
+    std::shared_ptr<Point> p12_1 = Point::GetInstance(1, PolarCoord(0, 100, 150));
+    std::shared_ptr<Point> p20_1 = Point::GetInstance(1, PolarCoord(0, 100, 50));
 
     EXPECT_EQ(9, Point::all_points_.size());
     EXPECT_EQ(2, p0_1->neighbours_count_);
@@ -302,6 +478,95 @@ TEST(Data, FaceSplit){
     EXPECT_TRUE(p20_1->IsNeighbour(p01_1));
 }
 
+TEST(Data, PoleFaceSplit){
+    Point::all_points_.clear();
+
+    std::shared_ptr<Point> p0 = Point::GetInstance(0, PolarCoord(0, CIRCLE_DIVISIONS /4, 0));
+    std::shared_ptr<Point> p1 = Point::GetInstance(0, PolarCoord(0, CIRCLE_DIVISIONS /8, CIRCLE_DIVISIONS /5));
+    std::shared_ptr<Point> p2 = Point::GetInstance(0, PolarCoord(0, CIRCLE_DIVISIONS /8, 2* CIRCLE_DIVISIONS /5));
+
+    p0->AddNeighbour(p1);
+    p1->AddNeighbour(p2);
+    p2->AddNeighbour(p0);
+
+    Face face(p0, p1, p2);
+
+    EXPECT_EQ(3, Point::all_points_.size());
+    EXPECT_EQ(2, p0->neighbours_count_);
+    EXPECT_EQ(2, p1->neighbours_count_);
+    EXPECT_EQ(2, p2->neighbours_count_);
+
+    face.Split();
+
+    EXPECT_EQ(9, Point::all_points_.size());
+    EXPECT_EQ(2, p0->neighbours_count_);
+    EXPECT_EQ(2, p1->neighbours_count_);
+    EXPECT_EQ(2, p2->neighbours_count_);
+
+    //for(auto it = Point::all_points_.begin(); it!=Point::all_points_.end(); ++it){
+    //    std::cout << it->second->recursion_ << "\t" ;
+    //    DisplayPolarCoord(it->second->GetPolarCoord());
+    //}
+
+    std::shared_ptr<Point> p3 = Point::GetInstance(0, PolarCoord(0, CIRCLE_DIVISIONS /8, 3* CIRCLE_DIVISIONS /5));
+
+    p3->AddNeighbour(p0);
+    p3->AddNeighbour(p2);
+
+    Face face_2(p0, p2, p3);
+
+    EXPECT_EQ(10, Point::all_points_.size());
+    EXPECT_EQ(3, p0->neighbours_count_);
+    EXPECT_EQ(2, p1->neighbours_count_);
+    EXPECT_EQ(3, p2->neighbours_count_);
+    EXPECT_EQ(2, p3->neighbours_count_);
+
+    face_2.Split();
+
+    EXPECT_EQ(13, Point::all_points_.size());
+    EXPECT_EQ(3, p0->neighbours_count_);
+    EXPECT_EQ(2, p1->neighbours_count_);
+    EXPECT_EQ(3, p2->neighbours_count_);
+    EXPECT_EQ(2, p3->neighbours_count_);
+
+    
+}
+
+TEST(Data, Bootstrap2){
+    Point::all_points_.clear();
+
+    bootstrap();
+
+    EXPECT_EQ(12, Point::all_points_.size());
+
+    std::shared_ptr<Point> north_pole = Point::GetInstance(0, PolarCoord(0, CIRCLE_DIVISIONS /4, 0));
+    EXPECT_EQ(12, Point::all_points_.size());
+
+    bootstrap2(0);
+
+    EXPECT_EQ(0, north_pole->recursion_);
+    EXPECT_EQ(5, north_pole->neighbours_count_);
+
+    for(int iterator = 0; iterator < north_pole->neighbours_count_; ++iterator){
+        EXPECT_EQ(0, north_pole->neighbours_[iterator]->recursion_);
+        EXPECT_EQ(5, north_pole->neighbours_[iterator]->neighbours_count_);
+        EXPECT_EQ(1, north_pole->neighbours_[iterator]->child_->recursion_);
+        EXPECT_EQ(5, north_pole->neighbours_[iterator]->child_->neighbours_count_);
+        for(int iterator_2 = 0; iterator_2 < north_pole->neighbours_[iterator]->child_->neighbours_count_; ++iterator_2){
+            EXPECT_EQ(1, north_pole->neighbours_[iterator]->child_->neighbours_[iterator_2]->recursion_);
+            EXPECT_EQ(6, north_pole->neighbours_[iterator]->child_->neighbours_[iterator_2]->neighbours_count_);
+            for(int iterator_3 = 0; iterator_3 < north_pole->neighbours_[iterator]->child_->neighbours_[iterator_2]->neighbours_count_; ++iterator_3){
+                EXPECT_EQ(1, north_pole->neighbours_[iterator]->child_->neighbours_[iterator_2]->neighbours_[iterator_3]->recursion_);
+                if(north_pole->neighbours_[iterator]->child_->neighbours_[iterator_2]->neighbours_[iterator_3]->parent_){
+                    EXPECT_EQ(5, north_pole->neighbours_[iterator]->child_->neighbours_[iterator_2]->neighbours_[iterator_3]->neighbours_count_);
+                } else {
+                    EXPECT_EQ(6, north_pole->neighbours_[iterator]->child_->neighbours_[iterator_2]->neighbours_[iterator_3]->neighbours_count_);
+                }
+            }
+        }
+    }
+
+}
 
 }  // namespace
 

@@ -44,15 +44,15 @@ class Point : public std::enable_shared_from_this<Point> {
     Point();
     Point(const int recursion, const PolarCoord coordinate) : 
                                          recursion_(recursion),
-                                         height_(std::get<0>(coordinate)),
-                                         lattitude_(std::get<1>(coordinate)),
-                                         longditude_(std::get<2>(coordinate)),
+                                         height_(round(std::get<0>(coordinate))),
+                                         lattitude_(round(std::get<1>(coordinate))),
+                                         longditude_(round(std::get<2>(coordinate))),
                                          neighbours_count_(0) {};
-    Point(const int recursion, const int height, const int lattitude, const int longditude) : 
+    Point(const int recursion, const double height, const double lattitude, const double longditude) : 
                                          recursion_(recursion),
-                                         height_(height),
-                                         lattitude_(lattitude),
-                                         longditude_(longditude),
+                                         height_(round(height)),
+                                         lattitude_(round(lattitude)),
+                                         longditude_(round(longditude)),
                                          neighbours_count_(0) {};
 };
 

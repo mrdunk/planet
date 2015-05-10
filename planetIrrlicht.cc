@@ -3,8 +3,8 @@
 
 PlanetSceneNode::PlanetSceneNode(scene::ISceneNode* parent, scene::ISceneManager* mgr, s32 id)
         : scene::ISceneNode(parent, mgr, id) {
-    //Material.Wireframe = false;
-    Material.Wireframe = true;
+    Material.Wireframe = false;
+    //Material.Wireframe = true;
     Material.Lighting = false;
     //Material.BackfaceCulling = false;
 
@@ -33,7 +33,7 @@ void PlanetSceneNode::Populate(){
     vertice_count_ = 0;
     face_count_ = 0;
 
-    auto it_face = FaceIterator(1);
+    auto it_face = FaceIterator(4);
     Face face = it_face.begin();
 
     while(face != it_face.end()){
@@ -41,20 +41,15 @@ void PlanetSceneNode::Populate(){
         CartesianCoord c1 = face.p1_->GetCartesianCoord();
         CartesianCoord c2 = face.p2_->GetCartesianCoord();
 
-        DisplayCoord(c0);
-        DisplayCoord(c1);
-        DisplayCoord(c2);
-        std::cout << std::endl;
-
-        if(abs(C_Z(c0)) > WORLD_RADIUS/2 || abs(C_Z(c1)) > WORLD_RADIUS/2 || abs(C_Z(c2)) > WORLD_RADIUS/2){
+        /*if(abs(C_Z(c0)) > WORLD_RADIUS/2 || abs(C_Z(c1)) > WORLD_RADIUS/2 || abs(C_Z(c2)) > WORLD_RADIUS/2){
             Vertices[vertice_count_ +0] = video::S3DVertex(C_Z(c0), C_Y(c0), C_X(c0), 1,1,0, video::SColor(255,255,255,255), 0, 1);
             Vertices[vertice_count_ +1] = video::S3DVertex(C_Z(c1), C_Y(c1), C_X(c1), 1,1,0, video::SColor(255,255,255,255), 0, 1);
             Vertices[vertice_count_ +2] = video::S3DVertex(C_Z(c2), C_Y(c2), C_X(c2), 1,1,0, video::SColor(255,255,255,255), 0, 1);
-        } else {
+        } else {*/
             Vertices[vertice_count_ +0] = video::S3DVertex(C_Z(c0), C_Y(c0), C_X(c0), 1,1,0, video::SColor(255,0,0,255), 0, 1);
             Vertices[vertice_count_ +1] = video::S3DVertex(C_Z(c1), C_Y(c1), C_X(c1), 1,1,0, video::SColor(255,vertice_count_ *10,0,255), 0, 1);
             Vertices[vertice_count_ +2] = video::S3DVertex(C_Z(c2), C_Y(c2), C_X(c2), 1,1,0, video::SColor(255,0,vertice_count_ *10,255), 0, 1);
-        }
+        //}
 
         Indices[(face_count_ *3) +0] = vertice_count_ +0;
         Indices[(face_count_ *3) +1] = vertice_count_ +1;
